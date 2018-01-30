@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         timer -= Time.deltaTime;
-        if(Input.GetMouseButton(0) && timer <= 0.0f)
+        if(Input.GetKeyDown(KeyCode.Space) && timer <= 0.0f)
         {
             timer = 0.5f;
             GameObject shotClone = pool.GetPooledObject();
@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void FixedUpdate () {
+        Screen.SetResolution(800, 1280, false);
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
