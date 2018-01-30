@@ -6,11 +6,14 @@ public class ShipMove : MonoBehaviour {
 
     private Rigidbody2D rigid;
     public float speed;
+    public AudioSource source;
+    public AudioClip clip;
+    public float volLowRange;
+    public float volHighRange;
 
     // Use this for initialization
     void Start () {
         rigid = GetComponent<Rigidbody2D>();
-
     }
 
     // Update is called once per frame
@@ -28,7 +31,18 @@ public class ShipMove : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        float vol = Random.Range(volLowRange, volHighRange);
+        source.PlayOneShot(clip, vol);
+        if (source.isPlaying)
+            Debug.Log("Explosion Sound");
+
+        int score = PlayerPrefs.GetInt("Score");
+        score++;
+        PlayerPrefs.SetInt("Score", score);
+
         collision.gameObject.SetActive(false);
         gameObject.SetActive(false);
+
+       
     }
 }

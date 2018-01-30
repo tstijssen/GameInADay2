@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [System.Serializable]
 public class Boundary
@@ -13,18 +14,21 @@ public class Boundary
 public class PlayerController : MonoBehaviour {
 
     private Rigidbody2D rigid;
-
+    public GameObject controller;
     public float PlayerSpeed;
 
     public Boundary boundary;
-
+    public AudioSource source;
+    public AudioClip clip;
+    public float volLowRange;
+    public float volHighRange;
     public GameObject shotSpawn;
     public GameObject shot;
     public float timer;
     ObjectPooler pool;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         rigid = GetComponent<Rigidbody2D>();
         pool = GetComponent<ObjectPooler>();
 	}
@@ -39,6 +43,8 @@ public class PlayerController : MonoBehaviour {
             shotClone.SetActive(true);
             shotClone.transform.position = new Vector3(transform.position.x, transform.position.y + 1, 0);
             shotClone.transform.rotation = transform.rotation;
+            float vol = Random.Range(volLowRange, volHighRange);
+            source.PlayOneShot(clip, vol);
         }
     }
 
@@ -58,5 +64,9 @@ public class PlayerController : MonoBehaviour {
             );
 	}
 
-
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy")
+            controller.GetComponent<Controller>().GameOver();
+    }
 }
